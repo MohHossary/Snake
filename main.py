@@ -27,10 +27,9 @@ class Controller(ClockListener):
         # else:
         #     self.walls: WallBuilder = VerticalWallsBuilder()
 
-        # self.walls = rdm.choice([NoWallsBuilder(), VerticalWallsBuilder(), HorizontalWallsBuilder(), AllWallsBuilder()])
         self.walls = rdm.choice([NoWallsBuilder(), VerticalWallsBuilder(), HorizontalWallsBuilder(), AllWallsBuilder()])
 
-        self.board: Board = Board(7, 20)
+        self.board: Board = Board(10, 10)
         self.walls.build_walls(self.board)
         self.snake = Snake(self.board)
         self.fruit = Fruit(self.board)

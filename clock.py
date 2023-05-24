@@ -17,21 +17,16 @@ class Clock:
 
     def start(self):
         self.active = True
-        thread = Thread(target=self.run)  # call run() in a new thread
+        thread = Thread(target=self.run)
         thread.start()
 
     def stop(self):
         self.active = False
-        # try to interrupt the thread
 
     def run(self):
         while self.active:
-            # sleep
             time.sleep(self.periodic_time)
-            # print("woke up")
-            # loop on the listeners list
             for listener in self.listeners:
-                # call clock_ticked()
                 listener.clock_ticked()
 
     def add_listener(self, listener: ClockListener):

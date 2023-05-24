@@ -14,7 +14,7 @@ class LibkeyboardKeyboardHandler(KeyboardHandler):
         keyboard.on_press_key('up', self.__set_up_flag)
         keyboard.on_press_key('down', self.__set_dn_flag)
         keyboard.on_press_key('left', self.__set_lt_flag)
-        keyboard.on_press_key('right', callback=self.__set_rt_flag)
+        keyboard.on_press_key('right', self.__set_rt_flag)
 
     def __set_up_flag(self, _: keyboard.KeyboardEvent):
         self.up = True
@@ -34,19 +34,19 @@ class LibkeyboardKeyboardHandler(KeyboardHandler):
         return up
 
     def is_down_pressed(self):
-        down = self.down
+        dn = self.down
         self.down = False
-        return down
+        return dn
 
     def is_left_pressed(self):
-        left = self.left
+        lt = self.left
         self.left = False
-        return left
+        return lt
 
     def is_right_pressed(self):
-        right = self.right
+        rt = self.right
         self.right = False
-        return right
+        return rt
 
     def clear_flags(self) -> None:
         self.up = False

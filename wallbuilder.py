@@ -21,17 +21,15 @@ class WallBuilder(ABC):
         pass
 
     def is_overlapping(self, location: Tuple[int, int]) -> bool:
-        for block in self.blocks:
-            if block.is_overlapping(location):
+        for brick in self.blocks:
+            if brick.is_overlapping(location):
                 return True
-        # else:
-        #     return False
         return False
 
-    def __build_brick(self, location, board):
-        ws = WallSegment(location)
-        board.move_to(ws, location)
-        self.blocks.append(ws)
+    def build_brick(self, location, board):
+        wallseg = WallSegment(location)
+        board.move_to(wallseg, location)
+        self.blocks.append(wallseg)
 
 
 class NoWallsBuilder(WallBuilder):
@@ -42,28 +40,36 @@ class NoWallsBuilder(WallBuilder):
 class VerticalWallsBuilder(WallBuilder):
 
     def build_walls(self, board: Board):
-        for i in range(board.rows):
-            self.__build_brick((0, i), board)
-            self.__build_brick((board.cols - 1, i), board)
+        for x in range(board.rows):
+            location = (0, x)
+            self.build_brick(location, board)
+        for x in range(board.rows):
+            location = (board.cols - 1, x)
+            self.build_brick(location, board)
 
 
 class HorizontalWallsBuilder(WallBuilder):
     def build_walls(self, board: Board):
-        # for every position related to the upper row, i.e. (x, 0)
-        #     create a wall segment
-        #     and put it in its location
-        #     add it to the list
-        for i in range(board.cols):
-            self.__build_brick((i, 0), board)
-            self.__build_brick((i, board.rows - 1), board)
+        for x in range(board.cols):
+            location = (x, 0)
+            self.build_brick(location, board)
+        for x in range(board.cols):
+            location = (x, board.rows - 1)
+            self.build_brick(location, board)
 
 
 class AllWallsBuilder(WallBuilder):
     def build_walls(self, board: Board):
-        for i in range(board.rows):
-            self.__build_brick((0, i), board)
-            self.__build_brick((board.cols - 1, i), board)
+        for x in range(1, board.rows - 1):
+            location = (0, x)
+            self.build_brick(location, board)
+        for x in range(1, board.rows - 1):
+            location = (board.cols - 1, x)
+            self.build_brick(location, board)
 
-        for i in range(1, board.cols - 1):
-            self.__build_brick((i, 0), board)
-            self.__build_brick((i, board.rows - 1), board)
+            for x in range(board.cols):
+                location = (x, 0)
+                self.build_brick(location, board)
+            for x in range(board.cols):
+                location = (x, board.rows - 1)
+                self.build_brick(location, board)

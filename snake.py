@@ -2,7 +2,7 @@ import sys
 from abc import ABC
 from os import system
 from typing import List, Tuple
-
+import random as rdm
 from board import Board, CellOccupier
 from fruit import Fruit
 
@@ -50,7 +50,7 @@ class Snake:
     score: int
 
     def __init__(self, board: Board):
-        head = Head(board.find_possible_location(), Snake.RIGHT, board)
+        head = Head(board.find_possible_location(), rdm.choice([self.RIGHT, self.LEFT, self.UP, self.DOWN]), board)
         self.all_segments = [head]
         self.score = 0
 
