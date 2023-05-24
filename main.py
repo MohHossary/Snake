@@ -7,6 +7,7 @@ from wallbuilder import WallBuilder, NoWallsBuilder, HorizontalWallsBuilder, Ver
 from keyboardhandler import KeyboardHandler
 from libkeyboardkeyboardhandler import LibkeyboardKeyboardHandler
 import random as rdm
+from GUI import PygameBoard
 
 
 class Controller(ClockListener):
@@ -17,6 +18,7 @@ class Controller(ClockListener):
     clock: Clock
     walls:  WallBuilder
     handler: KeyboardHandler
+    pygameBoard: PygameBoard = None
 
     def init_game(self):
         # wallrandom = rdm.randrange(1,4)
@@ -37,10 +39,12 @@ class Controller(ClockListener):
         # head: SnakeSegment = self.snake.all_segments[0]
         self.board.print_to_console()
         self.handler = LibkeyboardKeyboardHandler()
+        self.pygameBoard = PygameBoard(self.board, self.snake)
 
     def start_game(self):
         self.clock = Clock()
         self.clock.add_listener(self)
+        self.clock.add_listener(self.pygameBoard)
         self.clock.start()
 
     def clock_ticked(self):
