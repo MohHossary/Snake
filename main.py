@@ -18,7 +18,7 @@ class Controller(ClockListener):
     fruit: Fruit
     clock: Clock
     walls:  WallBuilder
-    handler: KeyboardHandler
+    handler: KeyboardHandler = None
     pygameBoard: PygameBoard = None
 
     def init_game(self):
@@ -59,13 +59,13 @@ class Controller(ClockListener):
         board = self.board
         fruit = self.fruit
 
-        if self.handler.is_up_pressed():
+        if self.handler and self.handler.is_up_pressed():
             snake.up_pressed()
-        elif self.handler.is_down_pressed():
+        elif self.handler and self.handler.is_down_pressed():
             snake.down_pressed()
-        elif self.handler.is_left_pressed():
+        elif self.handler and self.handler.is_left_pressed():
             snake.left_pressed()
-        elif self.handler.is_right_pressed():
+        elif self.handler and self.handler.is_right_pressed():
             snake.right_pressed()
         next_location = snake.next_location(board)
         if board.is_empty(next_location):
