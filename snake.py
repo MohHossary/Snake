@@ -123,7 +123,7 @@ class Snake:
         print('Game Over')
         print()
         print('your score is:', self.score)
-        sys.exit()
+
 
     def is_overlapping(self, location: Tuple[int, int]) -> bool:
         # if none of the segments overlap, return false

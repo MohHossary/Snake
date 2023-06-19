@@ -1,4 +1,5 @@
 import sys
+import pygame
 from snake import Snake  # SnakeSegment
 from board import Board
 from fruit import Fruit
@@ -46,6 +47,12 @@ class Controller(ClockListener):
         self.clock.add_listener(self)
         self.clock.add_listener(self.pygameBoard)
         self.clock.start()
+        while self.clock.active:
+            for temp_event in pygame.event.get():
+                if temp_event.type == pygame.QUIT:
+                    # running = False
+                    pygame.quit()
+                    sys.exit()
 
     def clock_ticked(self):
         snake = self.snake
@@ -70,8 +77,10 @@ class Controller(ClockListener):
             fruit.move_to_random(board)
             self.clock.speed_up()
         elif self.walls.is_overlapping(next_location):
+            self.clock.stop()
             snake.die()
         elif snake.is_overlapping(next_location):
+            self.clock.stop()
             snake.die()
 
         board.print_to_console()
