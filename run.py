@@ -13,6 +13,7 @@ from GUI import PygameBoard
 
 class Controller(ClockListener):
 
+    pygame.mixer.init()
     board: Board
     snake: Snake
     fruit: Fruit
@@ -20,6 +21,9 @@ class Controller(ClockListener):
     walls:  WallBuilder
     handler: KeyboardHandler = None
     pygameBoard: PygameBoard = None
+    grow_sound  = pygame.mixer.Sound('grow_sound.mp3')
+    bg_sound = pygame.mixer.Sound('bg_sound.mp3')
+
 
     def init_game(self):
         # wallrandom = rdm.randrange(1,4)
@@ -43,6 +47,7 @@ class Controller(ClockListener):
         self.pygameBoard = PygameBoard(self.board, self.snake)
 
     def start_game(self):
+        self.bg_sound.play(loops=-1)
         self.clock = Clock()
         self.clock.add_listener(self)
         self.clock.add_listener(self.pygameBoard)
@@ -58,6 +63,8 @@ class Controller(ClockListener):
         snake = self.snake
         board = self.board
         fruit = self.fruit
+        grow_sound = self.grow_sound
+        grow_sound.set_volume(1)
 
         if self.handler and self.handler.is_up_pressed():
             snake.up_pressed()
@@ -74,6 +81,7 @@ class Controller(ClockListener):
             snake.eat(fruit, board)
             snake.grow(board)
             snake.step(board)
+            grow_sound.play()
             fruit.move_to_random(board)
             self.clock.speed_up()
         elif self.walls.is_overlapping(next_location):
