@@ -23,7 +23,8 @@ class Controller(ClockListener):
     pygameBoard: PygameBoard = None
     grow_sound  = pygame.mixer.Sound('grow_sound.mp3')
     bg_sound = pygame.mixer.Sound('bg_sound.mp3')
-
+    bg_sound.set_volume(0.2)
+    grow_sound.set_volume(1)
 
     def init_game(self):
         # wallrandom = rdm.randrange(1,4)
@@ -64,7 +65,6 @@ class Controller(ClockListener):
         board = self.board
         fruit = self.fruit
         grow_sound = self.grow_sound
-        grow_sound.set_volume(1)
 
         if self.handler and self.handler.is_up_pressed():
             snake.up_pressed()
