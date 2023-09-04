@@ -1,9 +1,9 @@
 import random as rdm
 import time
+from pathlib import Path
 import pygame
 from pygame import Vector2
 from fruit import Fruit
-from libkeyboardkeyboardhandler import LibkeyboardKeyboardHandler
 from snake import Snake, Head, Body
 from board import Board
 from clock import ClockListener, Clock
@@ -18,6 +18,13 @@ class PygameBoard(ClockListener):
     x_translation: int
     y_translation: int
     score: int
+    snake_head_up_img = None
+    snake_head_down_img = None
+    snake_head_right_img = None
+    snake_head_left_img = None
+    snake_body_img = None
+    fruit_img = None
+    wall_img = None
 
     def __init__(self, board: Board, snake: Snake):
         pygame.init()
@@ -43,7 +50,7 @@ class PygameBoard(ClockListener):
         self.repaint()
 
     def repaint(self):
-        # font = pygame.font.Font('pixelated.zip', 100)
+        # font = pygame.font.Font(None, 100)
         # score_surf = font.render(str(self.snake.score), False, (255, 255, 255))
         # text_surf1 = font.render('Score', False, (255, 255, 255))
         # text_surf2 = font.render('Snake', False, (255, 255, 255))
@@ -88,13 +95,14 @@ class PygameBoard(ClockListener):
         pygame.display.update()
 
     def load_images(self):
-        self.snake_head_up_img = pygame.transform.rotozoom(pygame.image.load('Snake head_up.png'), 0, 12/11)
+        res_folder = Path(__file__).parent / 'res'
+        self.snake_head_up_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Snake head_up.png'), 0, 12 / 11)
         self.snake_head_down_img = pygame.transform.rotozoom(self.snake_head_up_img, 180, 1.)
         self.snake_head_left_img = pygame.transform.rotozoom(self.snake_head_up_img, 90, 1.)
         self.snake_head_right_img = pygame.transform.rotozoom(self.snake_head_up_img, -90, 1.)
-        self.snake_body_img = pygame.transform.rotozoom(pygame.image.load('Snake body.jpg'), 0, (60. / 85.))
-        self.fruit_img = pygame.transform.rotozoom(pygame.image.load('Fruit.jpg'), 0, (60. / 85.))
-        self.wall_img = pygame.transform.rotozoom(pygame.image.load('Wall.jpg'), 0, (60. / 85.))
+        self.snake_body_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Snake body.jpg'), 0, (60. / 85.))
+        self.fruit_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Fruit.jpg'), 0, (60. / 85.))
+        self.wall_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Wall.jpg'), 0, (60. / 85.))
 
 
 if __name__ == '__main__':
