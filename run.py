@@ -1,5 +1,7 @@
 import sys
+import time
 import pygame
+import resources
 from snake import Snake  # SnakeSegment
 from board import Board
 from fruit import Fruit
@@ -21,10 +23,7 @@ class Controller(ClockListener):
     walls:  WallBuilder
     handler: KeyboardHandler = None
     pygameBoard: PygameBoard = None
-    grow_sound  = pygame.mixer.Sound('grow_sound.mp3')
-    bg_sound = pygame.mixer.Sound('bg_sound.mp3')
-    bg_sound.set_volume(0.2)
-    grow_sound.set_volume(1)
+
 
     def init_game(self):
         # wallrandom = rdm.randrange(1,4)
@@ -48,7 +47,7 @@ class Controller(ClockListener):
         self.pygameBoard = PygameBoard(self.board, self.snake)
 
     def start_game(self):
-        self.bg_sound.play(loops=-1)
+        resources.bg_sound.play(loops=-1)
         self.clock = Clock()
         self.clock.add_listener(self)
         self.clock.add_listener(self.pygameBoard)
@@ -64,7 +63,6 @@ class Controller(ClockListener):
         snake = self.snake
         board = self.board
         fruit = self.fruit
-        grow_sound = self.grow_sound
 
         if self.handler and self.handler.is_up_pressed():
             snake.up_pressed()
@@ -81,17 +79,20 @@ class Controller(ClockListener):
             snake.eat(fruit, board)
             snake.grow(board)
             snake.step(board)
-            grow_sound.play()
             fruit.move_to_random(board)
             self.clock.speed_up()
         elif self.walls.is_overlapping(next_location):
-            self.clock.stop()
-            snake.die()
+            self.lose()
         elif snake.is_overlapping(next_location):
-            self.clock.stop()
-            snake.die()
+            self.lose()
 
         board.print_to_console()
+
+    def lose(self):
+        self.clock.stop()
+        resources.bg_sound.stop()
+        self.snake.die()
+        time.sleep(4.0)
 
 
 def main(argv):
