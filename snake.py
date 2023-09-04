@@ -1,8 +1,7 @@
-import sys
 from abc import ABC
-from os import system
 from typing import List, Tuple
 import random as rdm
+import resources
 from board import Board, CellOccupier
 from fruit import Fruit
 
@@ -60,8 +59,9 @@ class Snake:
 
     def eat(self, fruit: Fruit, board: Board):
         self.score = self.score + fruit.score
+        resources.grow_sound.play()
 #        del fruit
-#         self.grow(board)
+#        self.grow(board)
 
     def step(self, board: Board):
         for idx in range(len(self.all_segments)-1, 0, -1):
@@ -120,6 +120,7 @@ class Snake:
     def die(self):
         for seg in self.all_segments:
             seg.die()
+        resources.death_sound.play()
         print('Game Over')
         print()
         print('your score is:', self.score)

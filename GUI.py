@@ -1,12 +1,12 @@
 import random as rdm
 import time
-from pathlib import Path
 import pygame
 from pygame import Vector2
+import resources
 from fruit import Fruit
 from snake import Snake, Head, Body
 from board import Board
-from clock import ClockListener, Clock
+from clock import ClockListener
 from wallbuilder import WallSegment, NoWallsBuilder, VerticalWallsBuilder, HorizontalWallsBuilder, AllWallsBuilder
 
 
@@ -18,21 +18,14 @@ class PygameBoard(ClockListener):
     x_translation: int
     y_translation: int
     score: int
-    snake_head_up_img = None
-    snake_head_down_img = None
-    snake_head_right_img = None
-    snake_head_left_img = None
-    snake_body_img = None
-    fruit_img = None
-    wall_img = None
 
     def __init__(self, board: Board, snake: Snake):
         pygame.init()
         self.board = board
         self.snake = snake
-        self.load_images()
         self.update_parameters()
-        self.screen = pygame.display.set_mode((self.board.cols * self.cell_width + self.frame_width, self.board.rows * self.cell_height + self.frame_height))
+        self.screen = pygame.display.set_mode((self.board.cols * self.cell_width + self.frame_width,
+                                               self.board.rows * self.cell_height + self.frame_height))
         pygame.display.set_caption("Snake")
 
     def update_parameters(self):
@@ -76,33 +69,23 @@ class PygameBoard(ClockListener):
                 if isinstance(cell, Head):
                     head_direction = self.snake.all_segments[0].direction
                     if head_direction == self.snake.RIGHT:
-                        self.screen.blit(self.snake_head_right_img, self.project(x, y))
+                        self.screen.blit(resources.snake_head_right_img, self.project(x, y))
                     elif head_direction == self.snake.LEFT:
-                        self.screen.blit(self.snake_head_left_img, self.project(x, y))
+                        self.screen.blit(resources.snake_head_left_img, self.project(x, y))
                     elif head_direction == self.snake.UP:
-                        self.screen.blit(self.snake_head_up_img, self.project(x, y))
+                        self.screen.blit(resources.snake_head_up_img, self.project(x, y))
                     elif head_direction == self.snake.DOWN:
-                        self.screen.blit(self.snake_head_down_img, self.project(x, y))
+                        self.screen.blit(resources.snake_head_down_img, self.project(x, y))
 
                 elif isinstance(cell, Body):
-                    self.screen.blit(self.snake_body_img, self.project(x, y))
+                    self.screen.blit(resources.snake_body_img, self.project(x, y))
 
                 elif isinstance(cell, Fruit):
-                    self.screen.blit(self.fruit_img, self.project(x, y))
+                    self.screen.blit(resources.fruit_img, self.project(x, y))
 
                 elif isinstance(cell, WallSegment):
-                    self.screen.blit(self.wall_img, self.project(x, y))
+                    self.screen.blit(resources.wall_img, self.project(x, y))
         pygame.display.update()
-
-    def load_images(self):
-        res_folder = Path(__file__).parent / 'res'
-        self.snake_head_up_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Snake head_up.png'), 0, 12 / 11)
-        self.snake_head_down_img = pygame.transform.rotozoom(self.snake_head_up_img, 180, 1.)
-        self.snake_head_left_img = pygame.transform.rotozoom(self.snake_head_up_img, 90, 1.)
-        self.snake_head_right_img = pygame.transform.rotozoom(self.snake_head_up_img, -90, 1.)
-        self.snake_body_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Snake body.jpg'), 0, (60. / 85.))
-        self.fruit_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Fruit.jpg'), 0, (60. / 85.))
-        self.wall_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Wall.jpg'), 0, (60. / 85.))
 
 
 if __name__ == '__main__':
