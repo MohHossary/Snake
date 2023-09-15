@@ -2,6 +2,8 @@ import random as rdm
 import time
 import pygame
 from pygame import Vector2
+from pygame.font import Font
+
 import resources
 from fruit import Fruit
 from snake import Snake, Head, Body
@@ -16,16 +18,20 @@ class PygameBoard(ClockListener):
     frame_width: int
     frame_height: int
     x_translation: int
+    menu_width: int
     y_translation: int
     score: int
 
     def __init__(self, board: Board, snake: Snake):
         pygame.init()
+        pygame.font.init()
         self.board = board
         self.snake = snake
         self.update_parameters()
-        self.screen = pygame.display.set_mode((self.board.cols * self.cell_width + self.frame_width,
-                                               self.board.rows * self.cell_height + self.frame_height))
+        self.screen = pygame.display.set_mode(
+            (self.board.cols * self.cell_width + self.frame_width + self.menu_width,
+             self.board.rows * self.cell_height + self.frame_height),
+            pygame.RESIZABLE)
         pygame.display.set_caption("Snake")
 
     def update_parameters(self):
@@ -33,6 +39,7 @@ class PygameBoard(ClockListener):
         self.cell_height = 60
         self.frame_width = 10
         self.frame_height = 10
+        self.menu_width = 300
         self.x_translation, self.y_translation = self.frame_width // 2, self.frame_height // 2
 
     def project(self, x, y) -> tuple[int, int]:
@@ -40,16 +47,10 @@ class PygameBoard(ClockListener):
         return self.x_translation + inflate_x, self.y_translation + inflate_y
 
     def clock_ticked(self):
+        self.print_score()
         self.repaint()
 
     def repaint(self):
-        # font = pygame.font.Font(None, 100)
-        # score_surf = font.render(str(self.snake.score), False, (255, 255, 255))
-        # text_surf1 = font.render('Score', False, (255, 255, 255))
-        # text_surf2 = font.render('Snake', False, (255, 255, 255))
-        # self.screen.blit(score_surf, (615, 300))
-        # self.screen.blit(text_surf1, (615, 225))
-        # self.screen.blit(text_surf2, (615, 25))
         self.screen.fill((50, 50, 50), (0, 0, self.board.cols * self.cell_width, self.board.rows * self.cell_height))
         for c in range(0, self.board.cols + 1):
             px1, py1 = self.project(c, 0)
@@ -86,6 +87,14 @@ class PygameBoard(ClockListener):
                 elif isinstance(cell, WallSegment):
                     self.screen.blit(resources.wall_img, self.project(x, y))
         pygame.display.update()
+
+    def print_score(self):
+        font = pygame.font.SysFont("pixelated", 50)
+        self.screen.fill((0, 0, 0), (601, 0, 200, 600))
+        score_surf = Font.render(font, str(self.snake.score), True, (255, 255, 255))
+        snake_surf = font.render('Snake Score', True, (255, 255, 255))
+        self.screen.blit(score_surf, (700, 300))
+        self.screen.blit(snake_surf, (665, 225))
 
 
 if __name__ == '__main__':
