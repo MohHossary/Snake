@@ -14,6 +14,7 @@ death_sound.set_volume(1)
 bg_sound = pygame.mixer.Sound(res_folder / 'bg_sound.mp3')
 bg_sound.set_volume(0.2)
 
+icon = pygame.image.load(res_folder / 'snake.ico')
 snake_head_up_img = pygame.transform.rotozoom(pygame.image.load(res_folder / 'Snake_head_up.png'), 0, 12 / 11)
 snake_head_down_img = pygame.transform.rotozoom(snake_head_up_img, 180, 1.)
 snake_head_left_img = pygame.transform.rotozoom(snake_head_up_img, 90, 1.)

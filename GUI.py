@@ -33,6 +33,7 @@ class PygameBoard(ClockListener):
              self.board.rows * self.cell_height + self.frame_height),
             pygame.RESIZABLE)
         pygame.display.set_caption("Snake")
+        pygame.display.set_icon(resources.icon)
 
     def update_parameters(self):
         self.cell_width = 60
