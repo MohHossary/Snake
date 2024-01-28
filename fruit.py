@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from board import Board, CellOccupier
 
 
@@ -21,4 +19,3 @@ class Fruit(CellOccupier):
     def print_to_console(self):
         score = self.score
         print(score, end='')
-

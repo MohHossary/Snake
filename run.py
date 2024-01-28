@@ -7,8 +7,7 @@ from board import Board
 from fruit import Fruit
 from clock import Clock, ClockListener
 from wallbuilder import WallBuilder, NoWallsBuilder, HorizontalWallsBuilder, VerticalWallsBuilder, AllWallsBuilder
-from keyboardhandler import KeyboardHandler
-from libkeyboardkeyboardhandler import LibkeyboardKeyboardHandler
+from libpygamekeyboardhandler import LibpygameKeyboardHandler
 import random as rdm
 from GUI import PygameBoard
 
@@ -21,7 +20,7 @@ class Controller(ClockListener):
     fruit: Fruit
     clock: Clock
     walls:  WallBuilder
-    handler: KeyboardHandler = None
+    handler: LibpygameKeyboardHandler = None
     pygameBoard: PygameBoard = None
 
 
@@ -43,7 +42,7 @@ class Controller(ClockListener):
         # head: Head = cast(snake.all_segments[0], Head)
         # head: SnakeSegment = self.snake.all_segments[0]
         self.board.print_to_console()
-        self.handler = LibkeyboardKeyboardHandler()
+        self.handler = LibpygameKeyboardHandler()
         self.pygameBoard = PygameBoard(self.board, self.snake)
 
     def start_game(self):
@@ -53,9 +52,12 @@ class Controller(ClockListener):
         self.clock.add_listener(self.pygameBoard)
         self.clock.start()
         while self.clock.active:
-            for temp_event in pygame.event.get():
-                if temp_event.type == pygame.QUIT:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    self.handler.consume_input(event)
+                elif event.type == pygame.QUIT:
                     # running = False
+                    self.clock.stop()
                     pygame.quit()
                     sys.exit()
 
