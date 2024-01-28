@@ -25,9 +25,9 @@ class Clock:
 
     def run(self):
         while self.active:
-            time.sleep(self.periodic_time)
             for listener in self.listeners:
                 listener.clock_ticked()
+            time.sleep(self.periodic_time)
 
     def add_listener(self, listener: ClockListener):
         self.listeners.append(listener)

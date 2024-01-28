@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import random as rdm
 from abc import ABC, abstractmethod
 from typing import Optional, Tuple, List
