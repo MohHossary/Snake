@@ -3,7 +3,6 @@ import time
 import pygame
 from pygame import Vector2
 from pygame.font import Font
-
 import resources
 from fruit import Fruit
 from snake import Snake, Head, Body
@@ -80,7 +79,33 @@ class PygameBoard(ClockListener):
                         self.screen.blit(resources.snake_head_down_img, self.project(x, y))
 
                 elif isinstance(cell, Body):
-                    self.screen.blit(resources.snake_body_img, self.project(x, y))
+                    if cell.next_seg:
+                        direction_difference = cell.direction - cell.next_seg.direction
+                        if direction_difference == 3:
+                            direction_difference = -1
+                        elif direction_difference == -3:
+                            direction_difference = 1
+                    else:
+                        direction_difference = 0
+                    self.screen.blit(resources.icons[resources.ICON_TYPES.BODY.value][cell.direction][direction_difference],
+                                     self.project(x, y))
+                    # prev_cell = cell.next_seg
+                    # if self.snake.isready():
+                    #     if cell.order == len(self.snake.all_segments):
+                    #         next_cell = self.snake.all_segments[cell.order + 1]
+                    #         if prev_cell.location[0] == x - 1 and next_cell.location[1] == y - 1 or next_cell.location[0] == x - 1 and prev_cell.location[1] == y - 1:
+                    #             self.screen.blit(resources.snake_body_turn_connected_at_down_and_left_img, self.project(x, y))
+                    #         elif prev_cell.location[0] == x + 1 and next_cell.location[1] == y - 1 or next_cell.location[0] == x + 1 and prev_cell.location[1] == y - 1:
+                    #             self.screen.blit(resources.snake_body_turn_connected_at_down_and_right_img, self.project(x, y))
+                    #         elif prev_cell.location[0] == x - 1 and next_cell.location[1] == y + 1 or next_cell.location[0] == x - 1 and prev_cell.location[1] == y + 1:
+                    #             self.screen.blit(resources.snake_body_northwest_turn_img, self.project(x, y))
+                    #         elif prev_cell.location[0] == x + 1 and next_cell.location[1] == y + 1 or next_cell.location[0] == x + 1 and prev_cell.location[1] == y + 1:
+                    #             self.screen.blit(resources.snake_body_turn_connected_at_up_and_right_img, self.project(x, y))
+                    # elif cell.direction == self.snake.UP or cell.direction == self.snake.DOWN:
+                    #     self.screen.blit(resources.snake_body_vertical_img, self.project(x, y))
+                    # else:
+                    #     self.screen.blit(resources.snake_body_horizontal_img, self.project(x, y))
+
 
                 elif isinstance(cell, Fruit):
                     self.screen.blit(resources.fruit_img, self.project(x, y))

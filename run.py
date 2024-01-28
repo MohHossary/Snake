@@ -76,7 +76,7 @@ class Controller(ClockListener):
         if board.is_empty(next_location):
             snake.step(board)
         elif self.fruit.is_overlapping(next_location):
-            snake.eat(fruit, board)
+            snake.eat(fruit)
             snake.grow(board)
             snake.step(board)
             fruit.move_to_random(board)

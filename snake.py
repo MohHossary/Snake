@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import random as rdm
 import resources
 from board import Board, CellOccupier
@@ -7,13 +7,17 @@ from fruit import Fruit
 
 
 class SnakeSegment(CellOccupier, ABC):
-    direction: str
+    next_seg: Optional['SnakeSegment']
+    direction: int
     alive = True
+    icons: List[List]
+    ishead: bool
 
-    def __init__(self, location, direction: str, board: Board):
+    def __init__(self, location, direction: int, board: Board):
         super().__init__(location)
         self.location = location
         self.direction = direction
+        self.next_seg = None
         self.move_to(location, board)
 
     def move_to(self, location: Tuple[int, int], board: Board):
@@ -27,23 +31,26 @@ class Head(SnakeSegment):
     def print_to_console(self):
         print('o', end='')
 
-    def __init__(self, location, direction: str, board: Board):
+    def __init__(self, location, direction: int, board: Board):
         super(Head, self).__init__(location, direction, board)
+        self.ishead = True
+        self.next_seg = self
 
 
 class Body(SnakeSegment):
     def print_to_console(self):
         print('+', end='')
 
-    def __init__(self, location, direction: str, board: Board):
+    def __init__(self, location, direction: int, board: Board, order):
         super(Body, self).__init__(location, direction, board)
+        self.order = order
 
 
 class Snake:
-    UP = 'UP'
-    DOWN = 'DN'
-    LEFT = 'LT'
-    RIGHT = 'RT'
+    UP = 0
+    RIGHT = 1
+    DOWN = 2
+    LEFT = 3
 
     all_segments: List[SnakeSegment]
     score: int
@@ -54,10 +61,11 @@ class Snake:
         self.score = 0
 
     def grow(self, board: Board):
-        prospect_segment = Body((-1, -1), Snake.RIGHT, board)
+        prospect_segment = Body((-1, -1), Snake.RIGHT, board, len(self.all_segments))
+        self.all_segments[-1].next_seg = prospect_segment
         self.all_segments.append(prospect_segment)
 
-    def eat(self, fruit: Fruit, board: Board):
+    def eat(self, fruit: Fruit):
         self.score = self.score + fruit.score
         resources.grow_sound.play()
 #        del fruit
@@ -124,7 +132,6 @@ class Snake:
         print('Game Over')
         print()
         print('your score is:', self.score)
-
 
     def is_overlapping(self, location: Tuple[int, int]) -> bool:
         # if none of the segments overlap, return false
